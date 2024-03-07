@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Form</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        /* Container styles */
+        .container {
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 2000px;
+        }
+
+        /* Header styles */
+        header {
+            color: #3b3939;
+            padding: 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #dad6d6;
+        }
+
+        header h1 {
+            font-size: 26px;
+            margin-top: 5px;
+        }
+
+        header .profile-photo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-left: 40px;
+        }
+
+        header .branding {
+            display: flex;
+            align-items: center;
+        }
+
+        header nav ul {
+            list-style-type: none;
+            margin-top: 10px;
+            display: flex;
+        }
+
+        header nav ul li {
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            color: #3b3939;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .title h1{
+            margin-top: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius:10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="date"],
+        input[type="time"] {
+            width: calc(100% - 22px);
+            margin-bottom: 20px;
+        }
+
+        input[type="time"] {
+        width: calc(100% - 22px);
+        }
+
+
+        button {
+            background-color: #8c9bab;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #44576c;
+        }
+
+        #formDataDisplay {
+            margin-top: 20px;
+        }
+
+    </style>
+
+</head>
+<body>
+    <header>
+        <div class="branding">
+            <img src="pp.jpg" alt="Profile Photo" class="profile-photo">
+            <h1>SkySwoop.com</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="nearkl.html">Near Kuala Lumpur</a></li>
+                <li><a href="nearkk.html">Near Kota Kinabalu</a></li>
+                <li><a href="booking.html">Booking</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="title">
+        <h1>Booking Form</h1>
+    </div>
+
+    <form id="bookingForm">
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" autocomplete="name" required>
+    
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" autocomplete="email" required>
+    
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" autocomplete="tel" required>
+    
+        <label for="location">Location:</label>
+        <select id="location" name="location" autocomplete="location" required>
+            <option value="">Select Location</option>
+            <option value="Bukit Jugra">Bukit Jugra</option>
+            <option value="Kuala Kubu Bharu">Kuala Kubu Bharu</option>
+            <option value="Bukit Bubus">Bukit Bubus</option>
+            <option value="Kota Kinabalu Kokol Hill">Kota Kinabalu Kokol Hill</option>
+        </select>
+    
+        <label for="numberOfParagliders">Number of Paragliders:</label>
+        <input type="number" id="numberOfParagliders" name="numberOfParagliders" min="1" autocomplete="off" required>
+    
+        <label for="totalWeight">Total Weight (in kg):</label>
+        <input type="number" id="totalWeight" name="totalWeight" min="0" autocomplete="off" required>
+    
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" autocomplete="off" required>
+    
+        <label for="time">Time:</label>
+        <input type="time" id="time" name="time" autocomplete="off" required>
+    
+        <button type="submit">Submit</button>
+        <button id="readFormData" type="button">Read</button>
+    </form>
+    
+    <div id="formDataDisplay"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookingForm = document.getElementById('bookingForm');
+
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent the form from submitting normally
+
+                    // Display pop-up message
+                    window.alert("Form submitted successfully!");
+
+                    // Serialize form data
+                    const formData = {};
+                    const formElements = bookingForm.elements;
+                    for (let i = 0; i < formElements.length; i++) {
+                        if (formElements[i].name) {
+                            formData[formElements[i].name] = formElements[i].value;
+                        }
+                    }
+
+                    // Store form data in session storage
+                    localStorage.setItem('formData', JSON.stringify(formData));
+                });
+            }
+
+            const readFormDataButton = document.getElementById('readFormData');
+            if (readFormDataButton) {
+                readFormDataButton.addEventListener('click', function() {
+                    // Redirect to bookingdata.html
+                    window.location.href = 'bookingdata.html';
+                });
+            }
+        });
+    </script>
+    
+</body>
+</html>

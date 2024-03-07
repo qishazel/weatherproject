@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Details for Near Kuala Lumpur</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        /* Container styles */
+        .container {
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 2000px;
+        }
+
+        /* Header styles */
+        header {
+            color: #3b3939;
+            padding: 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #dad6d6;
+        }
+
+        header h1 {
+            font-size: 26px;
+            margin-top: 5px;
+        }
+
+        header .profile-photo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-left: 40px;
+        }
+
+        header .branding {
+            display: flex;
+            align-items: center;
+        }
+
+        header nav ul {
+            list-style-type: none;
+            margin-top: 10px;
+            display: flex;
+        }
+
+        header nav ul li {
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            color: #3b3939;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* Hero section styles */
+        #hero {
+            background-image: url('location1.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            text-align: center;
+            padding: 200px 0;
+            height: 400px;
+        }
+
+        /* About section styles */
+        #about {
+            padding: 50px 0;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #about .paragraph {
+            flex: 1;
+            padding-right: 70px;
+        }
+
+        #about img {
+            width: 100%;
+            max-width: 500px;
+            display: block;
+            margin-right: 40px;
+            margin-left: 40px;
+            height: auto;
+        }
+
+        #about h2 {
+            color: #704831;
+            font-size: 24px;
+            text-decoration: underline;
+            margin-bottom: 20px;
+        }
+
+        #about p {
+            color: #3f3f3f;
+            margin-bottom: 20px;
+        }
+
+        #about ul {
+            color: #3f3f3f;
+            margin-bottom: 20px;
+            list-style-type: none;
+        }
+
+        #about ul li {
+            margin-bottom: 10px;
+        }
+
+        /* weather */
+        .containerweather {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        #weatherInfo {
+            margin-top: 20px;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #dad6d6;
+            color: #585757;
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            font-size: 14px;
+        }
+
+        body {
+            margin-bottom: 60px; 
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="branding">
+            <img src="pp.jpg" alt="Profile Photo" class="profile-photo">
+            <h1>SkySwoop.com</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="nearkl.html">Near Kuala Lumpur</a></li>
+                <li><a href="nearkk.html">Near Kota Kinabalu</a></li>
+                <li><a href="booking.html">Booking</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="containerweather">
+        <h1>Travel Weather Application</h1>
+        <p>Select a location to check the weather forecast:</p>
+        <div class="search-container">
+            <select id="locationSelect" class="search-input">
+                <option value="Kuala Kubu Bharu">Kuala Kubu Bharu</option>
+                <option value="Bukit Jugra">Bukit Jugra</option>
+                <option value="Bukit Bubus">Bukit Bubus</option>
+
+            </select>
+            <button onclick="getWeather()" class="search-button">Check Weather</button>
+        </div>
+        <div id="weatherInfo" style="margin-top: 20px;"></div>
+        <div id="weatherRecommendation" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        function getWeather() {
+            var location = document.getElementById("locationSelect").value;
+            var mappedLocation = mapLocation(location);
+            fetchWeatherData(mappedLocation);
+        }
+
+        function mapLocation(location) {
+            // Map user selection to corresponding weather locations
+            var locationMap = {
+                "Kuala Kubu Bharu": ["Batang Kali"],
+                "Bukit Jugra": ["Hulu Langat"],
+                "Bukit Bubus": ["Kuala Terengganu"]
+
+            };
+            return locationMap[location];
+        }
+
+        function fetchWeatherData(locations) {
+            var apiKey = "9fd7a449d055dba26a982a3220f32aa2";
+            var promises = locations.map(location => {
+                return fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`)
+                    .then(response => response.json());
+            });
+
+            Promise.all(promises)
+            .then(data => {
+    var selectedLocation = document.getElementById("locationSelect").value;
+    var displayedLocation = selectedLocation === "Kuala Kubu Bharu" ? "Kuala Kubu Bharu" : selectedLocation;
+    var weatherInfo = data.map((locationData, index) => {
+        return `
+        <h2>Weather Forecast for ${displayedLocation}, MY</h2>
+        <p>Coordinates: [${locationData.coord.lat}, ${locationData.coord.lon}]</p>
+        <p>Weather Description: ${locationData.weather[0].description}</p>
+        <p>Current Temperature: ${locationData.main.temp} K</p>
+        <p>Min Temperature: ${locationData.main.temp_min} K</p>
+        <p>Max Temperature: ${locationData.main.temp_max} K</p>
+        <p>Humidity: ${locationData.main.humidity}%</p>
+        <p>Wind Speed: ${locationData.wind.speed} m/s</p>
+        <p>Sunrise: ${new Date(locationData.sys.sunrise * 1000).toLocaleTimeString()}</p>
+        <p>Sunset: ${new Date(locationData.sys.sunset * 1000).toLocaleTimeString()}</p>
+        `;
+    }).join("");
+
+    document.getElementById("weatherInfo").innerHTML = weatherInfo;
+
+    // Call the getWeatherRecommendation function and update the weather recommendation div
+    var weatherRecommendation = getWeatherRecommendation(data);
+    document.getElementById("weatherRecommendation").innerHTML = weatherRecommendation;
+})
+
+    .catch(error => {
+        console.error('Error fetching weather data:', error);
+        document.getElementById("weatherInfo").innerHTML = "<p>Error fetching weather data. Please try again.</p>";
+    });
+        }
+        
+
+        function getWeatherRecommendation(data) {
+            // Get the wind speed from the weather data in m/s
+            var windSpeed = data[0].wind.speed;
+
+            // Check the wind speed and provide a recommendation
+            if (windSpeed < 2) {
+                return "<p>The wind speed is ideal for paragliding. Enjoy your flight!</p>";
+            } else if (windSpeed >= 2 && windSpeed < 5) {
+                return "<p>The wind speed is moderate. Paragliding is possible, but please exercise caution.</p>";
+            } else {
+                return "<p>The wind speed is too high for safe paragliding. Please wait for better conditions or consider rescheduling.</p>";
+            }
+        }
+
+    </script>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2024 SkySwoop.com. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
